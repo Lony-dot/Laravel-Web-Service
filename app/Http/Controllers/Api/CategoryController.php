@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUpdateCategoryFormRequest;
 
 class CategoryController extends Controller
 {
@@ -23,7 +24,7 @@ class CategoryController extends Controller
         return $categories;
     }
 
-    public function store(Request $request) //store signifca que irá salvar uma informação
+    public function store(StoreUpdateCategoryFormRequest $request) //store signifca que irá salvar uma informação
     {
         $category = $this->category->create($request->all());
 
