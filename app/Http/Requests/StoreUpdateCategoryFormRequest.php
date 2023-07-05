@@ -16,13 +16,13 @@ class StoreUpdateCategoryFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+     *Permite editar registro no Banco de dados
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|min:3|max:50|unique:categories',
+            'name' => "required|min:3|max:50|unique:categories,name,{$this->segment(3)},id",
         ];
     }
 }
