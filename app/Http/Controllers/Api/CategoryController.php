@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Models\Category;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index(Category $category)
+    public function index(Category $category, Request $request)
     {
-        $categories = $category->get();
+        $categories = $category->getResults($request->name);
 
-        return response()->json($categories);
+        return $categories;
     }
 }
