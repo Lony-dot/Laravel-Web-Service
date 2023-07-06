@@ -21,8 +21,9 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-           'name'       => fake()->unique()->word,
-           'description'=> fake()->sentence(),
+            'category_id' => 1,
+            'name'        => fake()->unique()->word,
+            'description'  => fake()->sentence(),
         ];
     }
 }
