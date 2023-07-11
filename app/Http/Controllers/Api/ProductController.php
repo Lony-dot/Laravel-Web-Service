@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProductFormRequest;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -32,7 +33,21 @@ class ProductController extends Controller
      */
     public function store(StoreUpdateProductFormRequest $request)
     {
-        $product = $this->product->create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $name = Str::kebab($request->name);
+            $extension = $request->image->extension();
+
+            $nameFile = "{$name}.{$extension}";
+            $data['image'] = $nameFile;
+
+            $upload = $request->image->storeAs('products', $nameFile);
+
+            if (!$upload)
+                return response()->json(['error' => 'Fail_Upload'], 500);
+        }
+        $product = $this->product->create($data);
 
         return response()->json($product, 201);
     }
