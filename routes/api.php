@@ -11,5 +11,6 @@ use Illuminate\Support\Facades\Route;
  * Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 */
 
+Route::get('/categories/{id}/products', [CategoryController::class, 'products']);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products', ProductController::class);
