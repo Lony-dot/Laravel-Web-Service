@@ -7,11 +7,13 @@ use App\Http\Requests\StoreUpdateProductFormRequest;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
 
     private $product, $totalpage= 10;
+    private $path = 'products';
 
     public function __construct(Product $product)
     {
@@ -42,11 +44,12 @@ class ProductController extends Controller
             $nameFile = "{$name}.{$extension}";
             $data['image'] = $nameFile;
 
-            $upload = $request->image->storeAs('products', $nameFile);
+            $upload = $request->image->storeAs($this->path, $nameFile);
 
             if (!$upload)
                 return response()->json(['error' => 'Fail_Upload'], 500);
         }
+
         $product = $this->product->create($data);
 
         return response()->json($product, 201);
@@ -71,7 +74,27 @@ class ProductController extends Controller
         if (!$product = $this->product->find($id))
             return response()->json(['error' => 'Not Found'], 404);
 
-        $product->update($request->all());
+            $data = $request->all();
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if($product->image) {
+                if(Storage::exists("{$this->path}/{$product->image}"))
+                   Storage::delete("{$this->path}/{$product->image}");
+            }
+
+            $name = Str::kebab($request->name);
+            $extension = $request->image->extension();
+
+            $nameFile = "{$name}.{$extension}";
+            $data['image'] = $nameFile;
+
+            $upload = $request->image->storeAs($this->path, $nameFile);
+
+            if (!$upload)
+                return response()->json(['error' => 'Fail_Upload'], 500);
+        }
+
+        $product->update($data);
 
         return response()->json($product);
     }
