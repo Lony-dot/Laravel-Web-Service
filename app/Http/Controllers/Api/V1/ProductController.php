@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateProductFormRequest;
@@ -62,7 +62,7 @@ class ProductController extends Controller
     {
         if (!$product = $this->product->with('category')->find($id))
             return response()->json(['error' => 'Not Found'], 404);
-        
+
         return response()->json($product);
     }
 

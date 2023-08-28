@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Route;
  * Route::put('/categories/{id}', [CategoryController::class, 'update']);
  * Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 */
+Route::prefix('v1')->group(function () {
+    Route::get('/categories/{id}/products', [CategoryController::class, 'products']);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('products', ProductController::class);
+});
 
-Route::get('/categories/{id}/products', [CategoryController::class, 'products']);
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('products', ProductController::class);
